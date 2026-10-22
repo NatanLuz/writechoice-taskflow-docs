@@ -1,55 +1,42 @@
-# Mintlify Starter Kit
+# Documentação da TaskFlow API
 
-Use the starter kit to get your docs deployed and ready to customize.
+Site de documentação em português brasileiro, construído com Mintlify. A especificação `openapi.yaml` é a fonte de verdade para os contratos e alimenta a referência interativa configurada em `docs.json`.
 
-Click the green **Use this template** button at the top of this repo to copy the Mintlify starter kit. The starter kit contains examples with
+## Prévia local
 
-- Guide pages
-- Navigation
-- Customizations
-- API reference pages
-- Use of popular components
-
-**[Follow the full quickstart guide](https://starter.mintlify.com/quickstart)**
-
-## AI-assisted writing
-
-Set up your AI coding tool to work with Mintlify:
+Tenha o Node.js instalado. Na raiz do projeto, onde está `docs.json`, execute:
 
 ```bash
-npx skills add https://mintlify.com/docs
+npx mintlify dev
 ```
 
-This command installs Mintlify's documentation skill for your configured AI tools like Claude Code, Cursor, Windsurf, and others. The skill includes component reference, writing standards, and workflow guidance.
+Abra o endereço local informado pelo CLI, normalmente `http://localhost:3000`, para visualizar a documentação.
 
-See the [AI tools guides](/ai-tools) for tool-specific setup.
+## Validar a documentação
 
-## Development
+Para validar a estrutura e o conteúdo do projeto Mintlify, execute:
 
-Install the [Mintlify CLI](https://www.npmjs.com/package/mint) to preview your documentation changes locally. To install, use the following command:
-
-```
-npm i -g mint
+```bash
+npx mintlify validate
 ```
 
-Run the following command at the root of your documentation, where your `docs.json` is located:
+Essa validação verifica a documentação local. Ela não envia requisições à TaskFlow API nem substitui testes reais dos endpoints. Testes da API exigem chamadas HTTP separadas com credenciais válidas; não fazem parte dos comandos acima.
 
-```
-mint dev
-```
+## Estrutura
 
-View your local preview at `http://localhost:3000`.
+- `index.mdx`: visão geral e fluxo de uso.
+- `quickstart.mdx`: fluxo de ponta a ponta com cURL.
+- `authentication.mdx`: uso seguro da autenticação Bearer.
+- `errors.mdx`: erros e limitações documentados.
+- `openapi.yaml`: contratos e exemplos das cinco operações, referenciados pela navegação Mintlify.
+- `docs.json`: identidade, navegação e configuração do playground.
 
-## Publishing changes
+`openapi.backup.yaml` é uma cópia de segurança e deve permanecer fora do controle de versão e da publicação. `.mintignore` controla arquivos ignorados pelo Mintlify, mas não substitui `.gitignore` nem impede que o Git rastreie arquivos. Como o projeto ainda não tem `.gitignore`, crie esse arquivo e inclua `openapi.backup.yaml` antes de adicionar arquivos ao controle de versão.
 
-Install our GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app) to propagate changes from your repo to your deployment. Changes are deployed to production automatically after pushing to the default branch.
+## Manutenção
 
-## Need help?
-
-### Troubleshooting
-
-- If your dev environment isn't running: Run `mint update` to ensure you have the most recent version of the CLI.
-- If a page loads as a 404: Make sure you are running in a folder with a valid `docs.json`.
-
-### Resources
-- [Mintlify documentation](https://mintlify.com/docs)
+- Atualize os contratos em `openapi.yaml` quando a API mudar e mantenha os guias coerentes com a especificação.
+- Use placeholders em exemplos públicos; nunca inclua chaves reais ou dados sensíveis.
+- Revise a navegação e os links ao renomear ou adicionar páginas.
+- Antes da publicação, rode `npx mintlify validate` e confira a prévia com `npx mintlify dev`.
+- A publicação depende da integração do repositório com o fluxo de deploy Mintlify configurado para o projeto. Revise o site publicado após o deploy.

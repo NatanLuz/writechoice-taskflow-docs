@@ -1,47 +1,225 @@
 ---
-title: "Quickstart"
-description: "Begin with a guide on the fastest path to a successful outcome"
+title: "Início rápido"
+description: "Execute o fluxo básico da TaskFlow API com cURL no Bash ou no CMD do Windows."
 ---
 
-Describe how someone begins using your product. What is the first thing they need to do? Are there any prerequisites?
+Neste guia, você vai criar um projeto, criar uma tarefa, listar as tarefas do projeto, atualizar a tarefa e excluí-la.
 
-A quickstart should take someone from zero to using your product. They'll get a quick win and a sense of what they can accomplish.
+## Pré-requisitos
 
-## Prerequisites
+- Uma chave de API válida. Consulte [Autenticação](/authentication) para saber como protegê-la.
+- cURL instalado.
 
-Before you begin, you must have:
+Escolha os comandos para o terminal que está usando. **Os comandos Bash não devem ser copiados diretamente para o CMD do Windows**: a definição de variáveis, a referência a elas e o escape do JSON são diferentes.
 
-- Requirement one (for example, Node.js 18+, a free account, an API key)
-- Requirement two (for example, a compatible device, a compatible browser, a compatible operating system)
+### Bash (Linux/macOS)
 
-## Get started
+Defina a chave no terminal atual. Substitua o placeholder pela sua chave:
 
-<Steps>
-  <Step title="Install">
-    Describe how to install your product or sign up.
+```bash
+export TASKFLOW_API_KEY="<sua_chave_de_api>"
+```
 
-    ```bash
-    npm install your-package
-    ```
-  </Step>
-  <Step title="Configure">
-    Describe any setup or configuration needed before first use.
+### CMD do Windows
 
-    ```bash
-    your-cli init
-    ```
-  </Step>
-  <Step title="Run it">
-    Show the first thing a user does to see it working.
+Defina a chave no Prompt de Comando atual. Substitua o placeholder pela sua chave:
 
-    ```bash
-    your-cli start
-    ```
-  </Step>
-</Steps>
+```cmd
+set "TASKFLOW_API_KEY=<sua_chave_de_api>"
+```
 
-<Tip>
-  Give people a way to get help. This could be a link to a support page, a chat with a customer support agent, or a forum for your product.
+Não compartilhe a chave nem a salve no código do projeto. Ela será enviada no cabeçalho Bearer em cada comando.
 
-  Example: Need help? Reach out to us at [support@yourcompany.com](mailto:support@yourcompany.com).
-</Tip>
+<Note>
+  Quando o servidor está inativo, a primeira requisição pode levar até 60 segundos. Aguarde a resposta antes de repetir uma operação de criação, para evitar criar recursos duplicados.
+</Note>
+
+## 1. Crie um projeto
+
+O campo `name` é obrigatório. `description` é opcional; este exemplo envia somente o campo obrigatório.
+
+Corpo JSON enviado:
+
+```json
+{
+  "name": "Projeto de documentação"
+}
+```
+
+**Bash (Linux/macOS):**
+
+```bash
+curl --request POST \
+  --url "https://test-writechoice.onrender.com/projects" \
+  --header "Authorization: Bearer $TASKFLOW_API_KEY" \
+  --header "Content-Type: application/json" \
+  --data '{"name":"Projeto de documentação"}'
+```
+
+**CMD do Windows:**
+
+```cmd
+curl --request POST ^
+  --url "https://test-writechoice.onrender.com/projects" ^
+  --header "Authorization: Bearer %TASKFLOW_API_KEY%" ^
+  --header "Content-Type: application/json" ^
+  --data "{\"name\":\"Projeto de documentação\"}"
+```
+
+A API responde com `201 Created`. Exemplo de resposta, com valores ilustrativos:
+
+```json
+{
+  "project_id": "<project_id>",
+  "name": "Projeto de documentação",
+  "created_at": "<data e hora de criação>"
+}
+```
+
+Copie o valor de `project_id` da resposta. No mesmo terminal, guarde-o em uma variável para reutilizá-lo nos próximos comandos. Substitua o placeholder pelo valor recebido, sem os sinais `<` e `>`.
+
+**Bash (Linux/macOS):**
+
+```bash
+export PROJECT_ID="<project_id recebido>"
+```
+
+**CMD do Windows:**
+
+```cmd
+set "PROJECT_ID=<project_id recebido>"
+```
+
+## 2. Crie uma tarefa
+
+`project_id` e `title` são obrigatórios; `description` é opcional. Este exemplo envia somente os campos obrigatórios. A variável `PROJECT_ID` precisa estar definida no mesmo terminal.
+
+Corpo JSON enviado:
+
+```json
+{
+  "project_id": "<project_id recebido>",
+  "title": "Revisar guia"
+}
+```
+
+**Bash (Linux/macOS):**
+
+```bash
+curl --request POST \
+  --url "https://test-writechoice.onrender.com/tasks" \
+  --header "Authorization: Bearer $TASKFLOW_API_KEY" \
+  --header "Content-Type: application/json" \
+  --data "{\"project_id\":\"$PROJECT_ID\",\"title\":\"Revisar guia\"}"
+```
+
+**CMD do Windows:**
+
+```cmd
+curl --request POST ^
+  --url "https://test-writechoice.onrender.com/tasks" ^
+  --header "Authorization: Bearer %TASKFLOW_API_KEY%" ^
+  --header "Content-Type: application/json" ^
+  --data "{\"project_id\":\"%PROJECT_ID%\",\"title\":\"Revisar guia\"}"
+```
+
+A API responde com `201 Created`. A tarefa recebe status inicial `pending`. Exemplo de resposta, com IDs e datas ilustrativos:
+
+```json
+{
+  "task_id": "<task_id>",
+  "project_id": "<project_id>",
+  "title": "Revisar guia",
+  "status": "pending",
+  "created_at": "<data e hora de criação>",
+  "updated_at": "<data e hora de atualização>"
+}
+```
+
+Copie o `task_id` retornado e guarde-o para atualizar e excluir esta tarefa. Substitua o placeholder pelo valor recebido, sem `<` e `>`.
+
+**Bash (Linux/macOS):**
+
+```bash
+export TASK_ID="<task_id recebido>"
+```
+
+**CMD do Windows:**
+
+```cmd
+set "TASK_ID=<task_id recebido>"
+```
+
+## 3. Liste as tarefas do projeto
+
+O `project_id` da primeira resposta identifica o projeto cujas tarefas serão listadas.
+
+**Bash (Linux/macOS):**
+
+```bash
+curl --request GET \
+  --url "https://test-writechoice.onrender.com/projects/$PROJECT_ID/tasks" \
+  --header "Authorization: Bearer $TASKFLOW_API_KEY"
+```
+
+**CMD do Windows:**
+
+```cmd
+curl --request GET ^
+  --url "https://test-writechoice.onrender.com/projects/%PROJECT_ID%/tasks" ^
+  --header "Authorization: Bearer %TASKFLOW_API_KEY%"
+```
+
+A resposta `200 OK` contém o `project_id`, o total e a lista `tasks`. Se o projeto existir, mas ainda não tiver tarefas, `tasks` será uma lista vazia.
+
+## 4. Atualize a tarefa
+
+Use o `task_id` retornado ao criar a tarefa. Este exemplo altera o status; os valores permitidos são `pending`, `in_progress` e `done`.
+
+**Bash (Linux/macOS):**
+
+```bash
+curl --request PATCH \
+  --url "https://test-writechoice.onrender.com/tasks/$TASK_ID" \
+  --header "Authorization: Bearer $TASKFLOW_API_KEY" \
+  --header "Content-Type: application/json" \
+  --data '{"status":"in_progress"}'
+```
+
+**CMD do Windows:**
+
+```cmd
+curl --request PATCH ^
+  --url "https://test-writechoice.onrender.com/tasks/%TASK_ID%" ^
+  --header "Authorization: Bearer %TASKFLOW_API_KEY%" ^
+  --header "Content-Type: application/json" ^
+  --data "{\"status\":\"in_progress\"}"
+```
+
+A resposta `200 OK` contém a tarefa atualizada. Também é possível enviar `title` ou `description`; envie pelo menos um dos campos aceitos.
+
+## 5. Exclua a tarefa
+
+A exclusão é permanente. Confirme que `TASK_ID` contém o ID da tarefa que deseja remover.
+
+**Bash (Linux/macOS):**
+
+```bash
+curl --request DELETE \
+  --url "https://test-writechoice.onrender.com/tasks/$TASK_ID" \
+  --header "Authorization: Bearer $TASKFLOW_API_KEY"
+```
+
+**CMD do Windows:**
+
+```cmd
+curl --request DELETE ^
+  --url "https://test-writechoice.onrender.com/tasks/%TASK_ID%" ^
+  --header "Authorization: Bearer %TASKFLOW_API_KEY%"
+```
+
+A resposta `200 OK` confirma a exclusão. A especificação não define uma operação para recuperar uma tarefa excluída.
+
+## Próximos passos
+
+Para consultar os parâmetros, schemas e respostas, abra o grupo **Referência da API** na navegação lateral. O `docs.json` configura esse grupo para gerar as páginas dos endpoints diretamente de `openapi.yaml`; não há uma página inicial separada da referência com rota própria. Para diagnóstico, consulte [Erros e limitações](/errors).

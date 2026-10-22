@@ -4,16 +4,16 @@ info:
   title: TaskFlow API
   version: 1.0.0
   description: >
-    TaskFlow is a simple task management API that allows you to create projects,
-    manage tasks within those projects, update task statuses, and delete tasks.
+    A TaskFlow é uma API simples de gerenciamento de tarefas que permite criar projetos,
+    gerenciar tarefas nesses projetos, atualizar o status das tarefas e excluí-las.
 
-    **Important:** Most operations depend on each other. You must create a project
-    before creating tasks, and you must create a task before updating or deleting it.
-    Follow the workflow described in the guides to use the API correctly.
+    **Importante:** a maioria das operações depende de outras. Você precisa criar um projeto
+    antes de criar tarefas e criar uma tarefa antes de atualizá-la ou excluí-la.
+    Siga o fluxo descrito nos guias para usar a API corretamente.
 
 servers:
   - url: https://test-writechoice.onrender.com/
-    description: Production server
+    description: Servidor de produção
 
 security:
   - BearerAuth: []
@@ -24,8 +24,8 @@ components:
       type: http
       scheme: bearer
       description: >
-        All requests must include a valid API key in the Authorization header.
-        Example: `Authorization: Bearer tf-live-4a8f2c1e9b3d7e6a`
+        Todas as requisições devem incluir uma chave de API válida no cabeçalho Authorization.
+        Exemplo: `Authorization: Bearer <sua_chave_de_api>`
 
   schemas:
     Project:
@@ -34,21 +34,21 @@ components:
         project_id:
           type: string
           format: uuid
-          description: Unique identifier for the project. Generated automatically.
+          description: Identificador exclusivo do projeto, gerado automaticamente.
           example: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
         name:
           type: string
-          description: The name of the project.
+          description: Nome do projeto.
           example: "API Documentation Revamp"
         description:
           type: string
           nullable: true
-          description: An optional description of the project.
+          description: Descrição opcional do projeto.
           example: "Rewriting all public-facing API docs for v2."
         created_at:
           type: string
           format: date-time
-          description: Timestamp of when the project was created.
+          description: Data e hora de criação do projeto.
           example: "2025-05-12T10:30:00.000Z"
 
     Task:
@@ -57,40 +57,40 @@ components:
         task_id:
           type: string
           format: uuid
-          description: Unique identifier for the task. Generated automatically.
+          description: Identificador exclusivo da tarefa, gerado automaticamente.
           example: "f9e8d7c6-b5a4-3210-fedc-ba9876543210"
         project_id:
           type: string
           format: uuid
-          description: The ID of the project this task belongs to.
+          description: ID do projeto ao qual esta tarefa pertence.
           example: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
         title:
           type: string
-          description: The title of the task.
+          description: Título da tarefa.
           example: "Write introduction page"
         description:
           type: string
           nullable: true
-          description: An optional description of the task.
+          description: Descrição opcional da tarefa.
           example: "Draft the overview and getting started sections."
         status:
           type: string
           enum: [pending, in_progress, done]
           description: >
-            The current status of the task.
-            - `pending`: The task has not been started.
-            - `in_progress`: The task is actively being worked on.
-            - `done`: The task has been completed.
+            Status atual da tarefa.
+            - `pending`: a tarefa ainda não foi iniciada.
+            - `in_progress`: a tarefa está em andamento.
+            - `done`: a tarefa foi concluída.
           example: "pending"
         created_at:
           type: string
           format: date-time
-          description: Timestamp of when the task was created.
+          description: Data e hora de criação da tarefa.
           example: "2025-05-12T10:35:00.000Z"
         updated_at:
           type: string
           format: date-time
-          description: Timestamp of the last update to the task.
+          description: Data e hora da última atualização da tarefa.
           example: "2025-05-12T11:00:00.000Z"
 
     TaskList:
@@ -99,10 +99,10 @@ components:
         project_id:
           type: string
           format: uuid
-          description: The ID of the project being queried.
+          description: ID do projeto consultado.
         total:
           type: integer
-          description: Total number of tasks in the project.
+          description: Quantidade total de tarefas no projeto.
           example: 3
         tasks:
           type: array
@@ -114,21 +114,21 @@ components:
       properties:
         error:
           type: string
-          description: Short error type.
+          description: Tipo resumido do erro.
           example: "Not Found"
         message:
           type: string
-          description: Human-readable explanation of the error.
+          description: Explicação do erro em linguagem legível.
           example: "No project found with project_id 'abc123'."
 
 paths:
   /projects:
     post:
-      summary: Create a project
+      summary: Criar um projeto
       operationId: createProject
       description: >
-        Creates a new project. The `project_id` returned in the response is required
-        to create tasks. You must create a project before creating any tasks.
+        Cria um projeto. O `project_id` retornado na resposta é necessário
+        para criar tarefas. É preciso criar um projeto antes de criar tarefas.
       requestBody:
         required: true
         content:
@@ -140,15 +140,15 @@ paths:
               properties:
                 name:
                   type: string
-                  description: The name of the project. Required.
+                  description: Nome do projeto. Obrigatório.
                   example: "API Documentation Revamp"
                 description:
                   type: string
-                  description: An optional description of the project.
+                  description: Descrição opcional do projeto.
                   example: "Rewriting all public-facing API docs for v2."
       responses:
         "201":
-          description: Project created successfully.
+          description: Projeto criado com sucesso.
           content:
             application/json:
               schema:
@@ -159,7 +159,7 @@ paths:
                 description: "Rewriting all public-facing API docs for v2."
                 created_at: "2025-05-12T10:30:00.000Z"
         "400":
-          description: Missing or invalid request body.
+          description: Corpo da requisição ausente ou inválido.
           content:
             application/json:
               schema:
@@ -168,7 +168,7 @@ paths:
                 error: "Bad Request"
                 message: "The 'name' field is required and must be a non-empty string."
         "401":
-          description: Missing or invalid API key.
+          description: Chave de API ausente ou inválida.
           content:
             application/json:
               schema:
@@ -179,11 +179,11 @@ paths:
 
   /tasks:
     post:
-      summary: Create a task
+      summary: Criar uma tarefa
       operationId: createTask
       description: >
-        Creates a new task inside an existing project. Requires a valid `project_id`
-        obtained from `POST /projects`. Tasks are created with a default status of `pending`.
+        Cria uma tarefa em um projeto existente. Requer um `project_id` válido,
+        obtido em `POST /projects`. As tarefas são criadas com o status inicial `pending`.
       requestBody:
         required: true
         content:
@@ -197,19 +197,19 @@ paths:
                 project_id:
                   type: string
                   format: uuid
-                  description: The ID of the project to add the task to. Required.
+                  description: ID do projeto ao qual a tarefa será adicionada. Obrigatório.
                   example: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
                 title:
                   type: string
-                  description: The title of the task. Required.
+                  description: Título da tarefa. Obrigatório.
                   example: "Write introduction page"
                 description:
                   type: string
-                  description: An optional description of the task.
+                  description: Descrição opcional da tarefa.
                   example: "Draft the overview and getting started sections."
       responses:
         "201":
-          description: Task created successfully.
+          description: Tarefa criada com sucesso.
           content:
             application/json:
               schema:
@@ -223,19 +223,19 @@ paths:
                 created_at: "2025-05-12T10:35:00.000Z"
                 updated_at: "2025-05-12T10:35:00.000Z"
         "400":
-          description: Missing or invalid request body.
+          description: Corpo da requisição ausente ou inválido.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
         "401":
-          description: Missing or invalid API key.
+          description: Chave de API ausente ou inválida.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
         "404":
-          description: Project not found.
+          description: Projeto não encontrado.
           content:
             application/json:
               schema:
@@ -246,23 +246,23 @@ paths:
 
   /projects/{project_id}/tasks:
     get:
-      summary: List tasks in a project
+      summary: Listar tarefas de um projeto
       operationId: listTasks
       description: >
-        Returns all tasks belonging to a specific project. Requires a valid `project_id`.
-        Returns an empty `tasks` array if the project exists but has no tasks yet.
+        Retorna todas as tarefas de um projeto específico. Requer um `project_id` válido.
+        Se o projeto existir, mas ainda não tiver tarefas, retorna um array `tasks` vazio.
       parameters:
         - name: project_id
           in: path
           required: true
-          description: The ID of the project whose tasks you want to retrieve.
+          description: ID do projeto cujas tarefas serão consultadas.
           schema:
             type: string
             format: uuid
           example: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
       responses:
         "200":
-          description: Tasks retrieved successfully.
+          description: Tarefas consultadas com sucesso.
           content:
             application/json:
               schema:
@@ -279,13 +279,13 @@ paths:
                     created_at: "2025-05-12T10:35:00.000Z"
                     updated_at: "2025-05-12T10:35:00.000Z"
         "401":
-          description: Missing or invalid API key.
+          description: Chave de API ausente ou inválida.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
         "404":
-          description: Project not found.
+          description: Projeto não encontrado.
           content:
             application/json:
               schema:
@@ -296,17 +296,17 @@ paths:
 
   /tasks/{task_id}:
     patch:
-      summary: Update a task
+      summary: Atualizar uma tarefa
       operationId: updateTask
       description: >
-        Updates one or more fields of an existing task. You can update the `status`,
-        `title`, or `description`. At least one field must be provided.
-        Valid status values are: `pending`, `in_progress`, `done`.
+        Atualiza um ou mais campos de uma tarefa existente. Você pode atualizar `status`,
+        `title` ou `description`. É necessário informar pelo menos um campo.
+        Os valores válidos para o status são: `pending`, `in_progress` e `done`.
       parameters:
         - name: task_id
           in: path
           required: true
-          description: The ID of the task to update.
+          description: ID da tarefa a ser atualizada.
           schema:
             type: string
             format: uuid
@@ -321,19 +321,19 @@ paths:
                 status:
                   type: string
                   enum: [pending, in_progress, done]
-                  description: The new status for the task.
+                  description: Novo status da tarefa.
                   example: "in_progress"
                 title:
                   type: string
-                  description: A new title for the task.
+                  description: Novo título da tarefa.
                   example: "Write introduction and quickstart pages"
                 description:
                   type: string
-                  description: A new description for the task.
+                  description: Nova descrição da tarefa.
                   example: "Updated scope to include quickstart."
       responses:
         "200":
-          description: Task updated successfully.
+          description: Tarefa atualizada com sucesso.
           content:
             application/json:
               schema:
@@ -347,7 +347,7 @@ paths:
                 created_at: "2025-05-12T10:35:00.000Z"
                 updated_at: "2025-05-12T11:00:00.000Z"
         "400":
-          description: Invalid status value or missing fields.
+          description: Valor de status inválido ou campos ausentes.
           content:
             application/json:
               schema:
@@ -356,13 +356,13 @@ paths:
                 error: "Bad Request"
                 message: "Invalid status 'completed'. Allowed values are: pending, in_progress, done."
         "401":
-          description: Missing or invalid API key.
+          description: Chave de API ausente ou inválida.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
         "404":
-          description: Task not found.
+          description: Tarefa não encontrada.
           content:
             application/json:
               schema:
@@ -372,23 +372,23 @@ paths:
                 message: "No task found with task_id 'abc123'."
 
     delete:
-      summary: Delete a task
+      summary: Excluir uma tarefa
       operationId: deleteTask
       description: >
-        Permanently deletes a task. This action cannot be undone.
-        Requires a valid `task_id` obtained from `POST /tasks`.
+        Exclui uma tarefa permanentemente. Esta ação não pode ser desfeita.
+        Requer um `task_id` válido, obtido em `POST /tasks`.
       parameters:
         - name: task_id
           in: path
           required: true
-          description: The ID of the task to delete.
+          description: ID da tarefa a ser excluída.
           schema:
             type: string
             format: uuid
           example: "f9e8d7c6-b5a4-3210-fedc-ba9876543210"
       responses:
         "200":
-          description: Task deleted successfully.
+          description: Tarefa excluída com sucesso.
           content:
             application/json:
               schema:
@@ -398,13 +398,13 @@ paths:
                     type: string
                     example: "Task 'f9e8d7c6-b5a4-3210-fedc-ba9876543210' was successfully deleted."
         "401":
-          description: Missing or invalid API key.
+          description: Chave de API ausente ou inválida.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
         "404":
-          description: Task not found.
+          description: Tarefa não encontrada.
           content:
             application/json:
               schema:
