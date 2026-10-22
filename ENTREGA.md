@@ -22,23 +22,38 @@ Os exemplos usam placeholders para chaves e IDs. A documentação informa que a 
 
 Os testes manuais foram realizados em **22/10/2026 (UTC)**, usando cURL no CMD do Windows. Os cinco endpoints passaram pelo fluxo principal:
 
-| Endpoint | HTTP | Resultado |
-| --- | ---: | --- |
-| `POST /projects` | `201` | Projeto criado com sucesso. |
-| `POST /tasks` | `201` | Tarefa criada com status `pending`. |
+| Endpoint                           |  HTTP | Resultado                              |
+| ---------------------------------- | ----: | -------------------------------------- |
+| `POST /projects`                   | `201` | Projeto criado com sucesso.            |
+| `POST /tasks`                      | `201` | Tarefa criada com status `pending`.    |
 | `GET /projects/{project_id}/tasks` | `200` | Retornou `total: 1` e a tarefa criada. |
-| `PATCH /tasks/{task_id}` | `200` | Status atualizado para `in_progress`. |
-| `DELETE /tasks/{task_id}` | `200` | Exclusão confirmada pela API. |
+| `PATCH /tasks/{task_id}`           | `200` | Status atualizado para `in_progress`.  |
+| `DELETE /tasks/{task_id}`          | `200` | Exclusão confirmada pela API.          |
 
 A API exigiu autenticação Bearer durante o uso. Os cenários de erro não foram testados integralmente; portanto, a tabela registra apenas os resultados do fluxo principal.
+
+### Verificação do Playground publicado
+
+Em **22/10/2026**, os cinco endpoints também foram executados pelo Playground interativo do site público:
+
+| Endpoint                           | HTTP observado | Resultado                                                                         |
+| ---------------------------------- | -------------: | --------------------------------------------------------------------------------- |
+| `POST /projects`                   |  `201 Created` | Projeto criado; `project_id` retornado.                                           |
+| `POST /tasks`                      |  `201 Created` | Tarefa criada no projeto com status `pending`; `task_id` retornado.               |
+| `GET /projects/{project_id}/tasks` |       `200 OK` | Retornou `total: 1` e a tarefa criada.                                            |
+| `PATCH /tasks/{task_id}`           |       `200 OK` | Status alterado de `pending` para `in_progress`; identificação da tarefa mantida. |
+| `DELETE /tasks/{task_id}`          |       `200 OK` | API confirmou a exclusão da tarefa de teste.                                      |
 
 ## 5. Desafios encontrados e possíveis melhorias
 
 O OpenAPI fornece exemplos de respostas, mas não declara campos obrigatórios nos schemas de resposta. Por isso, a documentação não apresenta esses campos como obrigatórios além do que o contrato estabelece. A especificação também não define paginação, filtros ou limites de requisição, então esses recursos não foram presumidos.
+
+Na primeira tentativa de `POST /projects` pelo Playground, ocorreu um timeout HTTP `524` no serviço intermediário de requisições. A operação foi repetida posteriormente e concluída com `201 Created`; não foi determinada uma causa para a ocorrência.
 
 Como próximos passos, recomenda-se testar sistematicamente os cenários de erro e revisar os exemplos de resposta com a equipe responsável pela API. O site foi publicado e acessado em janela anônima do Brave, confirmando acesso público sem autenticação. A página **Criar um projeto** (`POST /projects`) foi inspecionada visualmente, e a navegação da referência exibiu os cinco endpoints em português.
 
 ## 6. Links da documentação pública e do repositório
 
 - **Repositório:** [github.com/NatanLuz/writechoice-taskflow-docs](https://github.com/NatanLuz/writechoice-taskflow-docs)
+
 - **Documentação:** [write-choice-task-flow-docs.mintlify.site](https://write-choice-task-flow-docs.mintlify.site)
