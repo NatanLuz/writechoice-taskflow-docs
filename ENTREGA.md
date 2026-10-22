@@ -36,9 +36,9 @@ A API exigiu autenticação Bearer durante o uso. Os cenários de erro não fora
 
 O OpenAPI fornece exemplos de respostas, mas não declara campos obrigatórios nos schemas de resposta. Por isso, a documentação não apresenta esses campos como obrigatórios além do que o contrato estabelece. A especificação também não define paginação, filtros ou limites de requisição, então esses recursos não foram presumidos.
 
-Como próximos passos, recomenda-se testar sistematicamente os cenários de erro e revisar os exemplos de resposta com a equipe responsável pela API. O site público ainda precisa de revisão final após a publicação das alterações.
+Como próximos passos, recomenda-se testar sistematicamente os cenários de erro e revisar os exemplos de resposta com a equipe responsável pela API. O site foi publicado e acessado em janela anônima do Brave, confirmando acesso público sem autenticação. A página **Criar um projeto** (`POST /projects`) foi inspecionada visualmente, e a navegação da referência exibiu os cinco endpoints em português.
 
 ## 6. Links da documentação pública e do repositório
 
 - **Repositório:** [github.com/NatanLuz/writechoice-taskflow-docs](https://github.com/NatanLuz/writechoice-taskflow-docs)
-- **Documentação:** [write-choice-task-flow-docs.mintlify.site](https://write-choice-task-flow-docs.mintlify.site) — a versão final ainda precisa de revisão após a publicação das alterações.
+- **Documentação:** [write-choice-task-flow-docs.mintlify.site](https://write-choice-task-flow-docs.mintlify.site)
