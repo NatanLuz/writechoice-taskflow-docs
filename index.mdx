@@ -1,30 +1,30 @@
 ---
-title: "Visão geral"
-description: "Conheça a TaskFlow API e encontre os guias e operações disponíveis."
+title: "Overview"
+description: "Learn about the TaskFlow API and find the guides and operations you need."
 ---
 
-A **TaskFlow API** é uma API REST para organizar projetos e tarefas. Você pode criar projetos, adicionar e consultar tarefas, alterar seus dados ou status e excluí-las.
+The **TaskFlow API** is a REST API for organizing projects and tasks. You can create projects, add and list tasks, update task details or status, and delete tasks.
 
-## Fluxo de uso
+## How it works
 
-Crie um projeto antes de adicionar tarefas. A resposta da criação fornece o `project_id` necessário para criar e listar tarefas. A criação de tarefa fornece o `task_id` usado para atualizá-la ou excluí-la.
+Create a project before adding tasks. The project creation response provides the `project_id` required to create and list tasks. Creating a task returns the `task_id` used to update or delete it.
 
-## URL base
+## Base URL
 
 ```text
 https://test-writechoice.onrender.com
 ```
 
-Todas as operações exigem uma chave de API no cabeçalho `Authorization` como token Bearer. Consulte [Autenticação](/authentication) para instruções de uso seguro.
+All operations require an API key in the `Authorization` header as a Bearer token. See [Authentication](/authentication) for secure usage instructions.
 
 <Note>
-  O servidor pode levar até 60 segundos para responder à primeira requisição. Aguarde antes de tentar novamente.
+  The server may take up to 60 seconds to respond to the first request. Wait for a response before retrying.
 </Note>
 
-## Comece por aqui
+## Get started
 
-O [guia de início rápido](/quickstart) demonstra o fluxo completo com cURL. Na navegação, abra **Referência da API** para consultar os cinco endpoints e seus contratos, gerados a partir do arquivo `openapi.yaml`.
+The [quickstart guide](/quickstart) walks through the complete workflow with cURL. In the navigation, open **API Reference** to view the five endpoints and their contracts, generated from `openapi.yaml`.
 
-<Card title="Executar o primeiro fluxo" icon="rocket" href="/quickstart">
-  Crie um projeto e gerencie uma tarefa com exemplos passo a passo.
+<Card title="Run your first workflow" icon="rocket" href="/quickstart">
+  Create a project and manage a task with step-by-step examples.
 </Card>

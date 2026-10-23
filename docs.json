@@ -15,11 +15,11 @@
   "navigation": {
     "pages": [
       {
-        "group": "Comece aqui",
+        "group": "Getting started",
         "pages": ["index", "quickstart", "authentication", "errors"]
       },
       {
-        "group": "Referência da API",
+        "group": "API Reference",
         "openapi": "openapi.yaml"
       }
     ]

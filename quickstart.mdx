@@ -1,48 +1,48 @@
 ---
-title: "Início rápido"
-description: "Execute o fluxo básico da TaskFlow API com cURL no Bash ou no CMD do Windows."
+title: "Quickstart"
+description: "Run the basic TaskFlow API workflow with cURL in Bash or Windows CMD."
 ---
 
-Neste guia, você vai criar um projeto, criar uma tarefa, listar as tarefas do projeto, atualizar a tarefa e excluí-la.
+This guide walks you through creating a project, creating a task, listing project tasks, updating a task, and deleting it.
 
-## Pré-requisitos
+## Prerequisites
 
-- Uma chave de API válida. Consulte [Autenticação](/authentication) para saber como protegê-la.
-- cURL instalado.
+- A valid API key. See [Authentication](/authentication) for instructions on protecting it.
+- cURL installed.
 
-Escolha os comandos para o terminal que está usando. **Os comandos Bash não devem ser copiados diretamente para o CMD do Windows**: a definição de variáveis, a referência a elas e o escape do JSON são diferentes.
+Choose the commands for your terminal. **Do not copy the Bash commands directly into Windows CMD**: variable assignment, variable references, and JSON escaping differ between shells.
 
 ### Bash (Linux/macOS)
 
-Defina a chave no terminal atual. Substitua o placeholder pela sua chave:
+Set the key in your current terminal. Replace the placeholder with your API key:
 
 ```bash
-export TASKFLOW_API_KEY="<sua_chave_de_api>"
+export TASKFLOW_API_KEY="<your_api_key>"
 ```
 
-### CMD do Windows
+### Windows CMD
 
-Defina a chave no Prompt de Comando atual. Substitua o placeholder pela sua chave:
+Set the key in your current Command Prompt session. Replace the placeholder with your API key:
 
 ```cmd
-set "TASKFLOW_API_KEY=<sua_chave_de_api>"
+set "TASKFLOW_API_KEY=<your_api_key>"
 ```
 
-Não compartilhe a chave nem a salve no código do projeto. Ela será enviada no cabeçalho Bearer em cada comando.
+Do not share your key or store it in your project source code. Each command sends it in the Bearer authorization header.
 
 <Note>
-  Quando o servidor está inativo, a primeira requisição pode levar até 60 segundos. Aguarde a resposta antes de repetir uma operação de criação, para evitar criar recursos duplicados.
+  When the server is idle, the first request may take up to 60 seconds. Wait for a response before retrying a creation request to avoid creating duplicate resources.
 </Note>
 
-## 1. Crie um projeto
+## 1. Create a project
 
-O campo `name` é obrigatório. `description` é opcional; este exemplo envia somente o campo obrigatório.
+The `name` field is required. `description` is optional; this example sends only the required field.
 
-Corpo JSON enviado:
+Request JSON:
 
 ```json
 {
-  "name": "Projeto de documentação"
+  "name": "Documentation project"
 }
 ```
 
@@ -53,53 +53,53 @@ curl --request POST \
   --url "https://test-writechoice.onrender.com/projects" \
   --header "Authorization: Bearer $TASKFLOW_API_KEY" \
   --header "Content-Type: application/json" \
-  --data '{"name":"Projeto de documentação"}'
+  --data '{"name":"Documentation project"}'
 ```
 
-**CMD do Windows:**
+**Windows CMD:**
 
 ```cmd
 curl --request POST ^
   --url "https://test-writechoice.onrender.com/projects" ^
   --header "Authorization: Bearer %TASKFLOW_API_KEY%" ^
   --header "Content-Type: application/json" ^
-  --data "{\"name\":\"Projeto de documentação\"}"
+  --data "{\"name\":\"Documentation project\"}"
 ```
 
-A API responde com `201 Created`. Exemplo de resposta, com valores ilustrativos:
+The API returns `201 Created`. Example response with illustrative values:
 
 ```json
 {
   "project_id": "<project_id>",
-  "name": "Projeto de documentação",
-  "created_at": "<data e hora de criação>"
+  "name": "Documentation project",
+  "created_at": "<creation timestamp>"
 }
 ```
 
-Copie o valor de `project_id` da resposta. No mesmo terminal, guarde-o em uma variável para reutilizá-lo nos próximos comandos. Substitua o placeholder pelo valor recebido, sem os sinais `<` e `>`.
+Copy `project_id` from the response. In the same terminal, store it in a variable for the following commands. Replace the placeholder with the returned value and omit the `<` and `>` characters.
 
 **Bash (Linux/macOS):**
 
 ```bash
-export PROJECT_ID="<project_id recebido>"
+export PROJECT_ID="<returned_project_id>"
 ```
 
-**CMD do Windows:**
+**Windows CMD:**
 
 ```cmd
-set "PROJECT_ID=<project_id recebido>"
+set "PROJECT_ID=<returned_project_id>"
 ```
 
-## 2. Crie uma tarefa
+## 2. Create a task
 
-`project_id` e `title` são obrigatórios; `description` é opcional. Este exemplo envia somente os campos obrigatórios. A variável `PROJECT_ID` precisa estar definida no mesmo terminal.
+`project_id` and `title` are required; `description` is optional. This example sends only the required fields. `PROJECT_ID` must be set in the same terminal.
 
-Corpo JSON enviado:
+Request JSON:
 
 ```json
 {
-  "project_id": "<project_id recebido>",
-  "title": "Revisar guia"
+  "project_id": "<returned_project_id>",
+  "title": "Review guide"
 }
 ```
 
@@ -110,49 +110,49 @@ curl --request POST \
   --url "https://test-writechoice.onrender.com/tasks" \
   --header "Authorization: Bearer $TASKFLOW_API_KEY" \
   --header "Content-Type: application/json" \
-  --data "{\"project_id\":\"$PROJECT_ID\",\"title\":\"Revisar guia\"}"
+  --data "{\"project_id\":\"$PROJECT_ID\",\"title\":\"Review guide\"}"
 ```
 
-**CMD do Windows:**
+**Windows CMD:**
 
 ```cmd
 curl --request POST ^
   --url "https://test-writechoice.onrender.com/tasks" ^
   --header "Authorization: Bearer %TASKFLOW_API_KEY%" ^
   --header "Content-Type: application/json" ^
-  --data "{\"project_id\":\"%PROJECT_ID%\",\"title\":\"Revisar guia\"}"
+  --data "{\"project_id\":\"%PROJECT_ID%\",\"title\":\"Review guide\"}"
 ```
 
-A API responde com `201 Created`. A tarefa recebe status inicial `pending`. Exemplo de resposta, com IDs e datas ilustrativos:
+The API returns `201 Created`. New tasks have an initial status of `pending`. Example response with illustrative IDs and timestamps:
 
 ```json
 {
   "task_id": "<task_id>",
   "project_id": "<project_id>",
-  "title": "Revisar guia",
+  "title": "Review guide",
   "status": "pending",
-  "created_at": "<data e hora de criação>",
-  "updated_at": "<data e hora de atualização>"
+  "created_at": "<creation timestamp>",
+  "updated_at": "<update timestamp>"
 }
 ```
 
-Copie o `task_id` retornado e guarde-o para atualizar e excluir esta tarefa. Substitua o placeholder pelo valor recebido, sem `<` e `>`.
+Copy the returned `task_id` and store it for updating and deleting this task. Replace the placeholder with the returned value and omit `<` and `>`.
 
 **Bash (Linux/macOS):**
 
 ```bash
-export TASK_ID="<task_id recebido>"
+export TASK_ID="<returned_task_id>"
 ```
 
-**CMD do Windows:**
+**Windows CMD:**
 
 ```cmd
-set "TASK_ID=<task_id recebido>"
+set "TASK_ID=<returned_task_id>"
 ```
 
-## 3. Liste as tarefas do projeto
+## 3. List project tasks
 
-O `project_id` da primeira resposta identifica o projeto cujas tarefas serão listadas.
+The `project_id` from the first response identifies the project whose tasks you want to list.
 
 **Bash (Linux/macOS):**
 
@@ -162,7 +162,7 @@ curl --request GET \
   --header "Authorization: Bearer $TASKFLOW_API_KEY"
 ```
 
-**CMD do Windows:**
+**Windows CMD:**
 
 ```cmd
 curl --request GET ^
@@ -170,11 +170,11 @@ curl --request GET ^
   --header "Authorization: Bearer %TASKFLOW_API_KEY%"
 ```
 
-A resposta `200 OK` contém o `project_id`, o total e a lista `tasks`. Se o projeto existir, mas ainda não tiver tarefas, `tasks` será uma lista vazia.
+The `200 OK` response contains `project_id`, `total`, and the `tasks` array. If the project exists but has no tasks, `tasks` is an empty array.
 
-## 4. Atualize a tarefa
+## 4. Update the task
 
-Use o `task_id` retornado ao criar a tarefa. Este exemplo altera o status; os valores permitidos são `pending`, `in_progress` e `done`.
+Use the `task_id` returned when you created the task. This example updates the status. Valid values are `pending`, `in_progress`, and `done`.
 
 **Bash (Linux/macOS):**
 
@@ -186,7 +186,7 @@ curl --request PATCH \
   --data '{"status":"in_progress"}'
 ```
 
-**CMD do Windows:**
+**Windows CMD:**
 
 ```cmd
 curl --request PATCH ^
@@ -196,11 +196,11 @@ curl --request PATCH ^
   --data "{\"status\":\"in_progress\"}"
 ```
 
-A resposta `200 OK` contém a tarefa atualizada. Também é possível enviar `title` ou `description`; envie pelo menos um dos campos aceitos.
+The `200 OK` response contains the updated task. You can also send `title` or `description`; include at least one of the accepted fields.
 
-## 5. Exclua a tarefa
+## 5. Delete the task
 
-A exclusão é permanente. Confirme que `TASK_ID` contém o ID da tarefa que deseja remover.
+Deletion is permanent. Confirm that `TASK_ID` contains the ID of the task you want to remove.
 
 **Bash (Linux/macOS):**
 
@@ -210,7 +210,7 @@ curl --request DELETE \
   --header "Authorization: Bearer $TASKFLOW_API_KEY"
 ```
 
-**CMD do Windows:**
+**Windows CMD:**
 
 ```cmd
 curl --request DELETE ^
@@ -218,8 +218,8 @@ curl --request DELETE ^
   --header "Authorization: Bearer %TASKFLOW_API_KEY%"
 ```
 
-A resposta `200 OK` confirma a exclusão. A especificação não define uma operação para recuperar uma tarefa excluída.
+The `200 OK` response confirms deletion. The specification does not define an operation to recover a deleted task.
 
-## Próximos passos
+## Next steps
 
-Para consultar os parâmetros, schemas e respostas, abra o grupo **Referência da API** na navegação lateral. O `docs.json` configura esse grupo para gerar as páginas dos endpoints diretamente de `openapi.yaml`; não há uma página inicial separada da referência com rota própria. Para diagnóstico, consulte [Erros e limitações](/errors).
+To review parameters, schemas, and responses, open the **API Reference** group in the sidebar. `docs.json` configures this group to generate endpoint pages directly from `openapi.yaml`; there is no separate landing page or route for the reference. For troubleshooting, see [Errors and limitations](/errors).

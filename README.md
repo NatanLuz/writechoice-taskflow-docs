@@ -1,42 +1,42 @@
-# Documentação da TaskFlow API
+# TaskFlow API Documentation
 
-Site de documentação em português brasileiro, construído com Mintlify. A especificação `openapi.yaml` é a fonte de verdade para os contratos e alimenta a referência interativa configurada em `docs.json`.
+A documentation site built with Mintlify. The `openapi.yaml` specification is the source of truth for API contracts and powers the interactive reference configured in `docs.json`.
 
-## Prévia local
+## Preview locally
 
-Tenha o Node.js instalado. Na raiz do projeto, onde está `docs.json`, execute:
+Install Node.js. From the project root, where `docs.json` is located, run:
 
 ```bash
 npx --yes mint dev
 ```
 
-Este comando abriu a prévia local neste ambiente. No Windows com Node.js 24, a ferramenta de prévia pode apresentar falhas intermitentes relacionadas a `p-cancelable`. Quando funcionar, abra o endereço informado pelo CLI, normalmente `http://localhost:3000`.
+This command opened the local preview before the English translation. The translated files have not yet been previewed. On Windows with Node.js 24, the preview tool may fail intermittently with an error related to `p-cancelable`. When it starts successfully, open the address reported by the CLI, usually `http://localhost:3000`.
 
-## Validar a documentação
+## Validate the documentation
 
-Para validar a estrutura e o conteúdo do projeto Mintlify, execute:
+To validate the Mintlify project structure and content, run:
 
 ```bash
 npx mintlify validate
 ```
 
-A validação foi concluída com sucesso neste projeto. Ela verifica a documentação local, mas não envia requisições à TaskFlow API nem substitui testes reais dos endpoints. Testes da API exigem chamadas HTTP separadas com credenciais válidas; não fazem parte dos comandos acima.
+The Portuguese documentation previously passed validation with this command. The English translation has not yet been validated. Mintlify validation checks the local documentation; it does not send requests to the TaskFlow API or replace real endpoint tests. API tests require separate HTTP requests with valid credentials and are not part of the commands above.
 
-## Estrutura
+## Project structure
 
-- `index.mdx`: visão geral e fluxo de uso.
-- `quickstart.mdx`: fluxo de ponta a ponta com cURL.
-- `authentication.mdx`: uso seguro da autenticação Bearer.
-- `errors.mdx`: erros e limitações documentados.
-- `openapi.yaml`: contratos e exemplos das cinco operações, referenciados pela navegação Mintlify.
-- `docs.json`: identidade, navegação e configuração do playground.
+- `index.mdx`: overview and workflow.
+- `quickstart.mdx`: end-to-end workflow using cURL.
+- `authentication.mdx`: secure use of Bearer authentication.
+- `errors.mdx`: documented errors and limitations.
+- `openapi.yaml`: contracts and examples for the five operations, referenced by Mintlify navigation.
+- `docs.json`: site identity, navigation, and playground configuration.
 
-`openapi.backup.yaml` é uma cópia de segurança e está listado em `.gitignore`, que impede que o Git passe a rastreá-lo. O mesmo arquivo também está em `.mintignore`, que controla o que o Mintlify ignora ao processar ou publicar a documentação. Cada arquivo atua em seu próprio fluxo; `.mintignore` não substitui `.gitignore`.
+`openapi.backup.yaml` is a backup copy and is listed in `.gitignore` to keep Git from tracking it. It is also listed in `.mintignore`, which controls what Mintlify ignores when processing or publishing documentation. These files apply to separate workflows; `.mintignore` does not replace `.gitignore`.
 
-## Manutenção
+## Maintenance
 
-- Atualize os contratos em `openapi.yaml` quando a API mudar e mantenha os guias coerentes com a especificação.
-- Use placeholders em exemplos públicos; nunca inclua chaves reais ou dados sensíveis.
-- Revise a navegação e os links ao renomear ou adicionar páginas.
-- Antes da publicação, rode `npx mintlify validate` e confira a prévia com `npx --yes mint dev`.
-- A publicação depende da integração do repositório com o fluxo de deploy Mintlify configurado para o projeto. Revise o site publicado após o deploy.
+- Update the contracts in `openapi.yaml` when the API changes, and keep the guides consistent with the specification.
+- Use placeholders in public examples; never include real API keys or sensitive data.
+- Review navigation and links when renaming or adding pages.
+- Before publishing, run `npx mintlify validate` and check the preview with `npx --yes mint dev`.
+- Publishing depends on the repository integration and Mintlify deployment workflow configured for this project. Review the published site after deployment.

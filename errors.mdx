@@ -1,33 +1,33 @@
 ---
-title: "Erros e limitações"
-description: "Entenda as respostas de erro documentadas e as dependências entre operações."
+title: "Errors and limitations"
+description: "Understand documented error responses and dependencies between operations."
 ---
 
-As respostas de erro documentadas usam um objeto JSON com `error` (tipo resumido) e `message` (explicação legível). O texto exato pode variar conforme a causa.
+Documented error responses use a JSON object with `error` (a short error type) and `message` (a human-readable explanation). The exact message may vary by cause.
 
-## Códigos documentados
+## Documented status codes
 
-| Código | Significado na API | O que conferir |
+| Code | Meaning | What to check |
 | --- | --- | --- |
-| `400 Bad Request` | Corpo ausente ou inválido; em atualização, status inválido ou campos ausentes. | Confira JSON, campos obrigatórios e valores permitidos. Para status, use `pending`, `in_progress` ou `done`. |
-| `401 Unauthorized` | Chave de API ausente ou inválida. | Envie `Authorization: Bearer <sua_chave_de_api>`. Veja [Autenticação](/authentication). |
-| `404 Not Found` | Projeto ou tarefa não encontrado. | Confira se o ID veio de uma resposta de criação e se está sendo usado na rota correta. Crie o projeto antes de criar tarefas. |
+| `400 Bad Request` | Missing or invalid request body; for updates, an invalid status or missing fields. | Check the JSON, required fields, and allowed values. For status, use `pending`, `in_progress`, or `done`. |
+| `401 Unauthorized` | Missing or invalid API key. | Send `Authorization: Bearer <your_api_key>`. See [Authentication](/authentication). |
+| `404 Not Found` | Project or task not found. | Check that the ID came from a creation response and is used in the correct route. Create the project before creating tasks. |
 
-Os códigos acima são os definidos na especificação para as operações correspondentes. Respostas de sucesso: `201` ao criar projeto ou tarefa e `200` ao listar, atualizar ou excluir.
+The codes above are defined in the specification for the corresponding operations. Success responses are `201` when creating a project or task and `200` when listing, updating, or deleting.
 
-## Dependências do fluxo
+## Workflow dependencies
 
-- Crie o projeto antes de criar tarefas. A criação de projeto retorna o `project_id`.
-- Use o `project_id` para criar tarefas e listar as tarefas do projeto.
-- Use o `task_id` retornado ao criar uma tarefa para atualizá-la ou excluí-la.
-- A exclusão é permanente.
+- Create a project before creating tasks. Project creation returns the `project_id`.
+- Use the `project_id` to create tasks and list the project's tasks.
+- Use the `task_id` returned when creating a task to update or delete it.
+- Deletion is permanent.
 
-## Tempo de resposta inicial
+## Initial response time
 
-O servidor pode levar até 60 segundos para responder à primeira requisição. Aguarde a resposta antes de reenviar uma operação de criação, pois uma nova tentativa pode criar outro recurso.
+The server may take up to 60 seconds to respond to the first request. Wait for the response before retrying a creation request, as a retry may create another resource.
 
-## Limitações conhecidas na especificação
+## Known specification limitations
 
-- A especificação lista somente cinco operações: criar projeto; criar, listar, atualizar e excluir tarefas. Consulte o grupo **Referência da API** na navegação.
-- Não há operações documentadas para listar projetos, consultar uma tarefa individual, recuperar uma tarefa excluída ou gerenciar chaves de API.
-- O contrato não documenta paginação, filtros, limites de requisição ou política de repetição. Não presuma a existência desses recursos.
+- The specification lists only five operations: create a project; create, list, update, and delete tasks. See the **API Reference** group in the navigation.
+- No operations are documented for listing projects, retrieving a single task, restoring a deleted task, or managing API keys.
+- The contract does not document pagination, filters, rate limits, or retry policies. Do not assume these features are available.
